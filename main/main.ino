@@ -1,9 +1,14 @@
+#include <AccelStepper.h>
+
 // Motor consts
-const int leftDIR = 32;
+const int leftDir = 32;
 const int leftStep = 33;
-const int rightDIR = 32;
+const int rightDir = 32;
 const int rightStep = 33;
 const int steps_per_rev = 200;  // For one full rotation. DO NOT CHANGE this value!!!
+#define motorInterfaceType 1
+AccelStepper leftMotor(InterfaceType, leftStep, leftDir);
+AccelStepper rightMotor(InterfaceType, rightStep, rightDir);
 
 // Ultrasonic sensor pins
 const int frontTrigPin = 23;
@@ -63,29 +68,43 @@ float distance(int side)
 
 void move()
 {
-  digitalWrite(DIR, LOW);
-  while(1)
-  {
-    digitalWrite(leftStep, HIGH);
-    delayMicroseconds(2000);
-    digitalWrite(leftStep, LOW);
-    delayMicroseconds(2000);
-    delay(3000);
-  }
+  digitalWrite(leftDir, LOW);
+  digitalWrite(leftStep, HIGH);
+  delayMicroseconds(2000);
+  digitalWrite(leftStep, LOW);
+  delayMicroseconds(2000);
 }
+
+void turnRight()
 
 void setup()
 {
+  // Establish communication
   Serial.begin(115200);
-  // For motor
-  pinMode(leftStep, OUTPUT);
-  pinMode(DIR, OUTPUT);
+
+  // Set pins for motors
+  // pinMode(leftStep, OUTPUT);
+  // pinMode(leftDir, OUTPUT);
+  // pinMode(rightStep, OUTPUT);
+  // pinMode(rightDir, OUTPUT);
+
+  // Motors
+  leftMotor.setMaxSpeed(1000);
+  rightMotor.setMaxSpeed(1000);
+
+  // Set pins for ultrasonic sensors
+  pinMode(frontTrigPin, OUTPUT); // Sets the trigPin as an Output
+  pinMode(frontEchoPin, INPUT); // Sets the echoPin as an Input
+  pinMode(leftTrigPin, OUTPUT); // Sets the trigPin as an Output
+  pinMode(leftEchoPin, INPUT); // Sets the echoPin as an Input
+  pinMode(rightTrigPin, OUTPUT); // Sets the trigPin as an Output
+  pinMode(rightEchoPin, INPUT); // Sets the echoPin as an Input
 }
 
 void loop()
 {
   // CW: HIGH
-  // digitalWrite(DIR, LOW);
+  // digitalWrite(leftDir, LOW);
   // Serial.println("Spinning Clockwise...");
   
   for(int i = 0; i<steps_per_rev; i++)
@@ -100,7 +119,7 @@ void loop()
 
   
   // ACW: HIGH
-  // digitalWrite(DIR, LOW);
+  // digitalWrite(leftDir, LOW);
   // Serial.println("Spinning Anti-Clockwise...");
 
   // for(int i = 0; i<steps_per_rev; i++)
