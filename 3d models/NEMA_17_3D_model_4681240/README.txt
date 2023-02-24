@@ -1,0 +1,1 @@
+NEMA 17 3D model by sale723 on Thingiverse: https://www.thingiverse.com/thing:4681240
